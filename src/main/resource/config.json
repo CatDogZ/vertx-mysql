@@ -1,0 +1,19 @@
+{
+  "port" : 8080,
+  "verticles" : [
+    "com.easyz.interceptor.InterceptorVerticle",
+    "com.easyz.verticle.api.DemoVerticle",
+    "com.easyz.verticle.dao.DemoDaoVerticle"
+
+  ],
+
+  "mysqlconfig" : {
+    "host" : "127.0.0.1",
+    "port" : 3306,
+    "maxPoolSize" : 100,
+    "username" : "123",
+    "password" : "12334",
+    "database" : "mino",
+    "queryTimeout" : 10000
+  }
+}
