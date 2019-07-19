@@ -1,4 +1,5 @@
-vertx+mysql整合的一些常用操作代码+结构的封装。
+vertx+mysql整合的一些常用操作代码+结构的封装。  
+
 
 注意事项：
 1、下载后，修改config.json里面的数据库链接信息。 运行com.easyz.verticle.main.MainVerticle下的main方法，即可启动服务。端口配置在config.json里面，项目的访问根目录在com.easyz.util.Constant的ROOT_HEAD_PATH变量。
