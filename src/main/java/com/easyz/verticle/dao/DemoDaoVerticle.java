@@ -3,10 +3,10 @@ package com.easyz.verticle.dao;
 import com.easyz.util.JsonUtil;
 import com.easyz.util.VertxResponce;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -27,16 +27,31 @@ public class DemoDaoVerticle extends BaseDaoVerticle{
   @Override
   public void start() throws Exception {
     super.start();
-//    MessageConsumer<List<JsonObject>> consumer = eventBus.consumer(getDaoConsumerPath(this.getClass(), "demo"));
-//    consumer.handler(msg -> busDemo(msg));
-    eventBus.consumer(getDaoConsumerPath(this.getClass(), "demo")).handler(this::busDemo);
+    eventBus.consumer(getDaoConsumerPath(this.getClass(), "demoQueryById")).handler(this::demoQueryById);
+    eventBus.consumer(getDaoConsumerPath(this.getClass(), "demoInsertByJson")).handler(this::demoInsertByJson);
   }
 
-  public void busDemo(Message message){
-    logger.severe("dao rev message1 :" + message.body());
-    mysqlClient.query("select * from test ", res -> {
+
+  public void demoInsertByJson(Message message){
+    JsonArray params = new JsonArray().add(message.body());
+    mysqlClient.updateWithParams("insert into test_temp(name) values(?)", params, res -> {
       if(res.succeeded()){
-        logger.severe("success!!!!!!!:");
+        System.out.println("add succ key:"+res.result().getKeys());
+        message.reply(res.result().getKeys());
+      }else{
+        System.out.println("insert into test temp fail:"+res.cause());
+      }
+    });
+  }
+
+
+
+  public void demoQueryById(Message message){
+    JsonArray jsonArray = new JsonArray().add(message.body());
+    logger.severe("dao rev message1 :" + message.body()+"  json param:"+jsonArray.toString());
+    mysqlClient.queryWithParams("select * from user where id = ?", jsonArray, res -> {
+      if(res.succeeded()){
+        logger.severe("success!!!!!!!:"+res.result().getRows());
         message.reply(JsonUtil.listToJsonArray(res.result().getRows()));
       }else{
         logger.severe("fail");
@@ -45,15 +60,5 @@ public class DemoDaoVerticle extends BaseDaoVerticle{
     });
 
 
-    //    System.out.println("rec fans msg:"+message.body());
-//    JsonObject jsonObject = new JsonObject()
-//      .put("key", "demokey")
-//      .put("value", "demovalue");
-//    mongoClient.save("demotable", jsonObject, res -> {
-//      if(res.failed())
-//        message.reply("保存失败哦");
-//      else
-//        message.reply("保存成功了哦:"+res.result());
-//    });
   }
 }

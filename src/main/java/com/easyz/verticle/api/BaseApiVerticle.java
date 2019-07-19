@@ -34,6 +34,10 @@ public abstract class BaseApiVerticle extends AbstractVerticle {
     return router;
   }
 
+  /**
+   * 获取httpserver对象
+   * @return
+   */
   private HttpServer getHttpServerInstance(){
     if(httpServer == null){
       return vertx.createHttpServer();
@@ -41,6 +45,11 @@ public abstract class BaseApiVerticle extends AbstractVerticle {
     return httpServer;
   }
 
+  /**
+   * 配置项目根目录路径，集成子路由
+   * @param router
+   * @param subRouter
+   */
   private void mountSubRouter(Router router, Router subRouter){
     if(subRouter != null){
       router.mountSubRouter(Constant.ROOT_HEAD_PATH, subRouter);
@@ -55,13 +64,12 @@ public abstract class BaseApiVerticle extends AbstractVerticle {
     eventBus = getEventBus();
     //配置访问项目根路径，并且集成二级路由
     mountSubRouter(router, requestApi());
-    //router.mountSubRouter(Constant.ROOT_HEAD_PATH, requestApi());
     //获取配置信息
     JsonObject conf = config();
     //创建httpserver
     httpServer = getHttpServerInstance();
     //初始化服务并监听端口
-    httpServer.requestHandler(router::accept).listen(conf.getInteger("port"));
+    httpServer.requestHandler(router::accept).listen(conf.getInteger(Constant.SERVER_PORT));
   }
 
   /**

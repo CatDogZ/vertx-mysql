@@ -8,4 +8,5 @@ public class Constant {
 
   //1级路由
   public static final String ROOT_HEAD_PATH = "/vtx-mini";
+  public static final String SERVER_PORT = "port";
 }
