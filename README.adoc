@@ -1,31 +1,6 @@
-= Mino
-
-image:https://img.shields.io/badge/vert.x-3.5.3-purple.svg[link="https://vertx.io"]
-
-This application was generated using http://start.vertx.io
-
-== Building
-
-To launch your tests:
-```
-./mvnw clean test
-```
-
-To package your application:
-```
-./mvnw clean package
-```
-
-To run your application:
-```
-./mvnw clean exec:java
-```
-
-== Help
-
-* https://vertx.io/docs/[Vert.x Documentation]
-* https://stackoverflow.com/questions/tagged/vert.x?sort=newest&pageSize=15[Vert.x Stack Overflow]
-* https://groups.google.com/forum/?fromgroups#!forum/vertx[Vert.x User Group]
-* https://gitter.im/eclipse-vertx/vertx-users[Vert.x Gitter]
-
-
+vertx+mysql整合的一些常用操作代码+结构的封装。
+注意事项：
+1、下载后，修改config.json里面的数据库链接信息。 运行com.easyz.verticle.main.MainVerticle下的main方法，即可启动服务。端口配置在config.json里面，项目的访问根目录在com.easyz.util.Constant的ROOT_HEAD_PATH变量。
+2、com.easyz.verticle.api.BaseApiVerticle是一个基础的verticle, 封装了一些共性的代码，所有想要发布的verticle请继承此抽象类。
+3、com.easyz.verticle.dao.BaseDaoVerticle是一个继承自BaseApiVerticle的持久层父类，所有想要发布的持久层verticle可直接继承此抽象类。 
+4、config.json里面的verticles，是你当前想要发布的所有verticle的类路径。项目启动时，会把这里配置的所有verticle进行发布。无需发布的verticle就不需要写了。emmmmm.....其实再简单一点可以直接写成扫描包，反射，发布，后面再说的把。
